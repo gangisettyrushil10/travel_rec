@@ -1,0 +1,60 @@
+/* Card styles */
+.card {
+    transition: transform 0.2s ease-in-out;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* Rating stars */
+.rating {
+    color: #ffd700;
+}
+
+/* Budget category badges */
+.budget-badge {
+    padding: 0.25em 0.6em;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.budget-badge.budget {
+    background-color: #28a745;
+    color: white;
+}
+
+.budget-badge.moderate {
+    background-color: #ffc107;
+    color: black;
+}
+
+.budget-badge.luxury {
+    background-color: #dc3545;
+    color: white;
+}
+
+/* Match score indicator */
+.match-score {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #007bff;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+}
+
+/* Activities tags */
+.activity-tag {
+    display: inline-block;
+    background-color: #e9ecef;
+    padding: 0.2em 0.6em;
+    margin: 0.1em;
+    border-radius: 12px;
+    font-size: 0.8rem;
+}

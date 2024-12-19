@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Your Travel Recommendations</h2>
+    <div id="recommendationsContainer" class="row mt-4">
+        <!-- Recommendations will be loaded here -->
+    </div>
+</div>
+
+<script>
+async function loadRecommendations() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get('user_id');
+    
+    if (!userId) {
+        alert('No user ID provided');
+        return;
+    }
+    
+    try {
+        const response = await fetch(`/api/recommendations?user_id=${userId}`);
+        const data = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(data.error || 'Failed to load recommendations');
+        }
+        
+        const container = document.getElementById('recommendationsContainer');
+        
+        if (data.recommendations.length === 0) {
+            container.innerHTML = '<div class="col-12"><p>No recommendations found. Try adjusting your preferences.</p></div>';
+            return;
+        }
+        
+        container.innerHTML = data.recommendations.map((rec, index) => {
+            const details = data.matching_details[index];
+            const activities = Array.isArray(rec.activities) ? rec.activities.join(', ') : rec.activities;
+            
+            return `
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">${rec.name}</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">${rec.country}</h6>
+                            <p class="card-text">
+                                <strong>Activities:</strong> ${activities}<br>
+                                <strong>Budget Category:</strong> ${rec.budget_category}<br>
+                                <strong>Rating:</strong> ${rec.rating}/5.0<br>
+                                <strong>Match Score:</strong> ${details.score}
+                            </p>
+                            <div class="card-text">
+                                <small class="text-muted">
+                                    <strong>Matching Activities:</strong><br>
+                                    ${details.matching_activities.join(', ')}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+        
+    } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('recommendationsContainer').innerHTML = 
+            `<div class="col-12"><p class="text-danger">Error loading recommendations: ${error.message}</p></div>`;
+    }
+}
+
+// Load recommendations when the page loads
+document.addEventListener('DOMContentLoaded', loadRecommendations);
+</script>
+{% endblock %}
